@@ -1,6 +1,7 @@
 package com.mycompany.parcial_final_estructura_de_datosii_maven;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -74,5 +75,19 @@ class RedSeguraTest {
         t.addEdge(new Edge("E1", t.getVertex("A"), t.getVertex("B"), 1, "ab", false));
         t.addEdge(new Edge("E2", t.getVertex("B"), t.getVertex("C"), 1, "bc", false));
         assertTrue(DepthFirstSearch.cycleFrom(t, "A").isEmpty());
+    }
+
+    @Test
+    void componentesDebilesIgnoranDireccionEIncluyenAislados() {
+        MixedGraph t = new MixedGraph();
+        t.addVertex(new Vertex("D", "Nodo D", "Prueba"));
+        t.addVertex(new Vertex("C", "Nodo C", "Prueba"));
+        t.addVertex(new Vertex("B", "Nodo B", "Prueba"));
+        t.addVertex(new Vertex("A", "Nodo A", "Prueba"));
+        t.addEdge(new Edge("E1", t.getVertex("A"), t.getVertex("B"), 1, "ab", true));
+        t.addEdge(new Edge("E2", t.getVertex("C"), t.getVertex("B"), 1, "cb", true));
+
+        assertEquals(List.of(List.of("A", "B", "C"), List.of("D")),
+                DepthFirstSearch.weaklyConnectedComponents(t));
     }
 }

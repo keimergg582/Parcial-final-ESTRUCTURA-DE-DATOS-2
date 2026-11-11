@@ -28,6 +28,7 @@ public class RedSeguraApplication {
                     case 8 -> queryVertex(scanner);
                     case 9 -> manualAvl(scanner);
                     case 10 -> showCycle(scanner);
+                    case 11 -> showWeakComponents();
                     case 0 -> System.out.println("Fin del programa.");
                     default -> System.out.println("Opcion invalida.");
                 }
@@ -47,6 +48,7 @@ public class RedSeguraApplication {
         System.out.println("8. Consultar vertice");
         System.out.println("9. Probar AVL con valores propios");
         System.out.println("10. Buscar ciclo desde un vertice");
+        System.out.println("11. Componentes debiles");
         System.out.println("0. Salir");
     }
 
@@ -194,6 +196,14 @@ public class RedSeguraApplication {
             System.out.println("Eliminado: " + tree.delete(value));
             System.out.println("InOrder: " + tree.inOrder());
             System.out.print(tree.structure());
+        }
+    }
+
+    private void showWeakComponents() {
+        List<List<String>> comps = DepthFirstSearch.weaklyConnectedComponents(graph);
+        System.out.println("Componentes debiles: " + comps.size());
+        for (int i = 0; i < comps.size(); i++) {
+            System.out.println("  " + (i + 1) + ": " + comps.get(i));
         }
     }
 

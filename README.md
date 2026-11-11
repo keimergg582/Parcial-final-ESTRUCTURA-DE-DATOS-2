@@ -6,7 +6,7 @@ RedSegura es un programa de consola en Java 17 que modela la movilidad entre uni
 
 El programa tiene dos árboles: un árbol binario de búsqueda (ABB) y un árbol AVL. Ambos buscan lugares por nombre y permiten comparar la cantidad de pasos de cada búsqueda. El AVL se rebalancea después de cada inserción y eliminación, para evitar que el árbol se comporte como una lista.
 
-Sobre el grafo se implementan BFS (búsqueda en anchura) y DFS (búsqueda en profundidad), que recorren los lugares desde un vértice de origen, y Dijkstra, que calcula la ruta de menor costo entre dos lugares.
+Sobre el grafo se implementan BFS (búsqueda en anchura) y DFS (búsqueda en profundidad), que recorren los lugares desde un vértice de origen. DFS también detecta ciclos y calcula componentes débiles ignorando la dirección de los arcos. Dijkstra calcula la ruta de menor costo entre dos lugares.
 
 Los tiempos son datos de simulación didáctica y no representan información oficial de tránsito ni de respuesta a emergencias.
 
@@ -41,33 +41,20 @@ La clase principal está configurada en el pom.xml (propiedad exec.mainClass), p
 
 Todas las clases están en el paquete com.mycompany.parcial_final_estructura_de_datosii_maven, en src/main/java. Las pruebas están en src/test/java.
 
-| Clase                | Responsabilidad | Uso |
-
-|----------------------|-----------------------------------------------------------------------------------------------------------|-------------------------------------------------|
-
-| Vertex               | Lugar del grafo: ID, etiqueta y tipo.                                                                     | Consulta de vértice (8)                         |
-
-| Edge 		           | Conexión entre dos vértices: ID, peso, etiqueta y orientación. Valida peso mayor que cero.                | Representaciones (3), Dijkstra (6)              |
-
-| MixedGraph           | Grafo con aristas y arcos. Valida IDs duplicados e inexistentes, y permite bloquear conexiones.           | Todas las consultas                             |
-
-| BinarySearchTree     | Árbol binario de búsqueda genérico: insertar, buscar, contar pasos, eliminar y recorridos.                | Búsqueda (1)                                    |
-
-| AvlTree              | Árbol AVL genérico: insertar y eliminar con rotaciones LL, RR, LR y RL, y contar pasos de búsqueda.       | Búsqueda (1), rotaciones (2), prueba propia (9) |
-
-| GraphRepresentations | Construye lista de adyacencia, matriz de adyacencia y matriz de incidencia.                               | Representaciones (3)                            |
-
-| BreadthFirstSearch   | BFS con cola y conjunto de visitados. Devuelve el árbol de padres y los niveles.                          | BFS (4)                                         |
-
-| DepthFirstSearch     | DFS y detección de ciclos. El ciclo se reconstruye con las aristas que lo forman.                         | DFS (5), ciclos (10)                            |
-
-| DijkstraSolver       | Ruta mínima con cola de prioridad, relajación y mapa de predecesores.                                     | Dijkstra (6), bloqueo de R16 (7)                |
-
-| DijkstraResult       | Resultado de Dijkstra: ruta, costo, origen, destino y si hay ruta.                                        | Dijkstra (6 y 7)                                |
-
-| RedSeguraCore        | Carga los datos del parcial y crea las estructuras (grafo, ABB, AVL). Es el punto de entrada a los datos. | Todas las consultas                             |
-
-| RedSeguraApplication | Menú de consola: lee la entrada, llama a los módulos y muestra resultados.                                | Menú completo  
+| Clase | Responsabilidad | Uso |
+|---|---|---|
+| Vertex | Lugar del grafo: ID, etiqueta y tipo. | Consulta de vértice (8) |
+| Edge | Conexión entre dos vértices: ID, peso, etiqueta y orientación. Valida peso mayor que cero. | Representaciones (3), Dijkstra (6) |
+| MixedGraph | Grafo con aristas y arcos. Valida IDs duplicados e inexistentes, y permite bloquear conexiones. | Todas las consultas |
+| BinarySearchTree | Árbol binario de búsqueda genérico: insertar, buscar, contar pasos, eliminar y recorridos. | Búsqueda (1) |
+| AvlTree | Árbol AVL genérico: insertar y eliminar con rotaciones LL, RR, LR y RL, y contar pasos de búsqueda. | Búsqueda (1), rotaciones (2), prueba propia (9) |
+| GraphRepresentations | Construye lista de adyacencia, matriz de adyacencia y matriz de incidencia. | Representaciones (3) |
+| BreadthFirstSearch | BFS con cola y conjunto de visitados. Devuelve el árbol de padres y los niveles. | BFS (4) |
+| DepthFirstSearch | DFS, detección de ciclos y cálculo de componentes débiles. El ciclo se reconstruye con las aristas que lo forman. | DFS (5), ciclos (10), componentes débiles (11) |
+| DijkstraSolver | Ruta mínima con cola de prioridad, relajación y mapa de predecesores. | Dijkstra (6), bloqueo de R16 (7) |
+| DijkstraResult | Resultado de Dijkstra: ruta, costo, origen, destino y si hay ruta. | Dijkstra (6 y 7) |
+| RedSeguraCore | Carga los datos del parcial y crea las estructuras (grafo, ABB, AVL). Es el punto de entrada a los datos. | Todas las consultas |
+| RedSeguraApplication | Menú de consola: lee la entrada, llama a los módulos y muestra resultados. | Menú completo |
 
 ### Dependencias
 
@@ -112,25 +99,17 @@ Todas las clases están en el paquete com.mycompany.parcial_final_estructura_de_
 
 V = número de vértices (12), E = número de conexiones (18), h = altura del ABB.
 
-| Operación                       | Tiempo                                                    | Espacio  |
-
-|---------------------------------|-----------------------------------------------------------|----------|
-
-| ABB: insertar, buscar, eliminar | O(h). En el peor caso O(n), si los datos llegan ordenados | O(n)     |
-
-| AVL: insertar, buscar, eliminar | O(log n)                                                  | O(n)     |
-
-| Lista de adyacencia             | O(V + E)                                                  | O(V + E) |
-
-| Matriz de adyacencia            | O(V²)                                                     | O(V²)    |
-
-| Matriz de incidencia            | O(V · E)                                                  | O(V · E) |
-
-| BFS                             | O(V + E)                                                  | O(V)     |
-
-| DFS y detección de ciclos       | O(V + E)                                                  | O(V)     |
-
-| Dijkstra con cola de prioridad  | O((V + E) log V)                                          | O(V + E) |
+| Operación | Tiempo | Espacio |
+|---|---|---|
+| ABB: insertar, buscar, eliminar | O(h). En el peor caso O(n), si los datos llegan ordenados | O(n) |
+| AVL: insertar, buscar, eliminar | O(log n) | O(n) |
+| Lista de adyacencia | O(V + E) | O(V + E) |
+| Matriz de adyacencia | O(V²) | O(V²) |
+| Matriz de incidencia | O(V · E) | O(V · E) |
+| BFS | O(V + E) | O(V) |
+| DFS y detección de ciclos | O(V + E) | O(V) |
+| Componentes débiles | O(V · E) | O(V) |
+| Dijkstra con cola de prioridad | O((V + E) log V) | O(V + E) |
 
 El ABB no se rebalancea. Si las etiquetas llegan en orden, el árbol se vuelve una lista y cada búsqueda cuesta O(n). El AVL evita ese caso porque se rebalancea después de cada inserción.
 
@@ -142,17 +121,12 @@ Q1. Búsqueda del Hospital Universitario. El ABB lo encuentra en 3 pasos y el AV
 
 Q2. Rotaciones AVL. Cada caso inserta tres claves en un árbol sin balanceo y luego aplica la rotación correspondiente:
 
-| Caso | Inserción  | Antes de rotar                                                       | Rotación                                      | Después                                    |           
-
-|------|------------|----------------------------------------------------------------------|-----------------------------------------------|--------------------------------------------|
-
-| LL   | 30, 20, 10 | 30 con hijo izquierdo 20, y 20 con hijo izquierdo 10 (FB de 30 = +2) | Rotación simple a la derecha en 30            | 20 con 10 a la izquierda y 30 a la derecha |
-
-| RR   | 10, 20, 30 | 10 con hijo derecho 20, y 20 con hijo derecho 30 (FB de 10 = -2)     | Rotación simple a la izquierda en 10          | 20 con 10 a la izquierda y 30 a la derecha |
-
-| LR   | 30, 10, 20 | 30 con hijo izquierdo 10, que tiene hijo derecho 20 (FB de 30 = +2)  | Rotación izquierda en 10, luego derecha en 30 | 20 con 10 a la izquierda y 30 a la derecha |
-
-| RL   | 10, 30, 20 | 10 con hijo derecho 30, que tiene hijo izquierdo 20 (FB de 10 = -2)  | Rotación derecha en 30, luego izquierda en 10 | 20 con 10 a la izquierda y 30 a la derecha |
+| Caso | Inserción | Antes de rotar | Rotación | Después |
+|---|---|---|---|---|
+| LL | 30, 20, 10 | 30 con hijo izquierdo 20, y 20 con hijo izquierdo 10 (FB de 30 = +2) | Rotación simple a la derecha en 30 | 20 con 10 a la izquierda y 30 a la derecha |
+| RR | 10, 20, 30 | 10 con hijo derecho 20, y 20 con hijo derecho 30 (FB de 10 = -2) | Rotación simple a la izquierda en 10 | 20 con 10 a la izquierda y 30 a la derecha |
+| LR | 30, 10, 20 | 30 con hijo izquierdo 10, que tiene hijo derecho 20 (FB de 30 = +2) | Rotación izquierda en 10, luego derecha en 30 | 20 con 10 a la izquierda y 30 a la derecha |
+| RL | 10, 30, 20 | 10 con hijo derecho 30, que tiene hijo izquierdo 20 (FB de 10 = -2) | Rotación derecha en 30, luego izquierda en 10 | 20 con 10 a la izquierda y 30 a la derecha |
 
 El árbol final es el mismo en los cuatro casos, porque con tres claves solo hay una forma balanceada posible.
 
@@ -166,29 +140,23 @@ Q6. Bloqueo de R16. Al bloquearla, la ruta cambia a S02 → S01 → S09 → S10 
 
 Q7. Vértice inexistente. El programa muestra "Vértice inexistente" y sigue ejecutándose.
 
+Q8. Componentes débiles. La opción 11 imprime los grupos conectados ignorando la dirección de los arcos e incluyendo los vértices aislados.
+
 ## Pruebas
 
-El proyecto tiene 8 pruebas JUnit 5 en src/test/java/com/mycompany/parcial_final_estructura_de_datosii_maven/RedSeguraTest.java. Se ejecutan con mvn clean test y el resultado esperado es Tests run: 8, Failures: 0, Errors: 0, Skipped: 0.
+El proyecto tiene 9 pruebas JUnit 5 en src/test/java/com/mycompany/parcial_final_estructura_de_datosii_maven/RedSeguraTest.java. Se ejecutan con mvn clean test y el resultado esperado es Tests run: 9, Failures: 0, Errors: 0, Skipped: 0.
 
-| Prueba                         | Tipo                | Qué comprueba                                              |
-
-|--------------------------------|---------------------|------------------------------------------------------------|
-
-| verticeS08TieneNombreCorrecto  | Caso normal         | El vértice S08 tiene la etiqueta "Terminal de Transporte". |
-
-| rutaNormalDeControl            | Caso normal         | Dijkstra de S02 a S08 cuesta 24 minutos.                   |
-
-| verticeInexistenteDevuelveNull | Vértice inexistente | Pedir "ZZ" al grafo devuelve null.                         |
-
-| sinRutaCuandoS02QuedaAislado   | Grafo desconectado  | Con R04 y R05 bloqueadas, S08 no es alcanzable desde S02.  |
-
-| pesoCeroLanzaExcepcion         | Peso inválido       | Edge con peso 0 lanza IllegalArgumentException.            |
-
-| pesoNegativoLanzaExcepcion     | Peso inválido       | Edge con peso -5 lanza IllegalArgumentException.           |
-
-| trianguloNoDirigidoTieneCiclo  | Ciclos              | Un triángulo de aristas no dirigidas tiene ciclo.          |
-
-| arbolNoDirigidoNoTieneCiclo    | Ciclos              | Un árbol de dos aristas no dirigidas no tiene ciclo.       |
+| Prueba | Tipo | Qué comprueba |
+|---|---|---|
+| verticeS08TieneNombreCorrecto | Caso normal | El vértice S08 tiene la etiqueta "Terminal de Transporte". |
+| rutaNormalDeControl | Caso normal | Dijkstra de S02 a S08 cuesta 24 minutos. |
+| verticeInexistenteDevuelveNull | Vértice inexistente | Pedir "ZZ" al grafo devuelve null. |
+| sinRutaCuandoS02QuedaAislado | Grafo desconectado | Con R04 y R05 bloqueadas, S08 no es alcanzable desde S02. |
+| pesoCeroLanzaExcepcion | Peso inválido | Edge con peso 0 lanza IllegalArgumentException. |
+| pesoNegativoLanzaExcepcion | Peso inválido | Edge con peso -5 lanza IllegalArgumentException. |
+| trianguloNoDirigidoTieneCiclo | Ciclos | Un triángulo de aristas no dirigidas tiene ciclo. |
+| arbolNoDirigidoNoTieneCiclo | Ciclos | Un árbol de dos aristas no dirigidas no tiene ciclo. |
+| componentesDebilesIgnoranDireccionEIncluyenAislados | Componentes débiles | A→B←C y D aislado producen [[A, B, C], [D]]. |
 
 ## Limitaciones
 
@@ -197,8 +165,7 @@ Los tiempos son datos simulados y no representan tránsito real. El menú valida
 ## Origen del código y herramientas
 
 - El pom.xml y la configuración de JUnit 5 se basan en la documentación oficial de Maven y JUnit.
-- Parte de la estructura de las clases se generó con asistencia de ChatGPT. El autor la revisó, la probó y la adaptó, incluyendo las correcciones de DFS (detección de ciclos), AVL (bandera de inserción) y la validación de entradas.
 - Las pruebas JUnit fueron escritas por el autor a partir de los casos del enunciado.
 
 
-
+https://github.com/keimergg582/Parcial-final-ESTRUCTURA-DE-DATOS-2/tree/master
