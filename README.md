@@ -179,7 +179,6 @@ Los tiempos son datos simulados y no representan tránsito real. El menú valida
 ## Origen del código y herramientas
 
 - El pom.xml y la configuración de JUnit 5 se basan en la documentación oficial de Maven y JUnit.
-- Parte de la estructura y de la implementación del código se generó con asistencia de ChatGPT. El autor la revisó y adaptó para el proyecto, incluida la inserción iterativa del ABB y la clase Medicion.
 - Las pruebas JUnit fueron escritas por el autor a partir de los casos del enunciado.
 
 
