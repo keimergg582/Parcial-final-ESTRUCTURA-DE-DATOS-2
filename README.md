@@ -73,7 +73,7 @@ Todas las clases están en el paquete com.mycompany.parcial_final_estructura_de_
 
 - Peso mayor que cero. Edge rechaza pesos 0 y negativos. Dijkstra solo funciona con pesos no negativos, y un peso 0 no se distingue de "sin conexión" en la matriz de adyacencia. Por eso el peso mínimo válido es 1.
 
-- Árboles genéricos. BinarySearchTree y AvlTree usan T extends Comparable<T> en lugar de int. Así pueden guardar etiquetas de texto, como "Hospital Universitario", y el mismo código sirve para las pruebas con enteros de la opción 9.
+- Árboles genéricos. BinarySearchTree y AvlTree usan `T extends Comparable<T>` en lugar de `int`. Así pueden guardar etiquetas de texto, como "Hospital Universitario", y el mismo código sirve para las pruebas con enteros de la opción 9.
 
 - Conteo de pasos separado de la búsqueda. searchSteps devuelve la cantidad de nodos visitados cuando encuentra la clave, y un número negativo cuando no la encuentra. Search es un método booleano aparte, para no mezclar la respuesta con el conteo.
 
@@ -112,6 +112,20 @@ V = número de vértices (12), E = número de conexiones (18), h = altura del AB
 | Dijkstra con cola de prioridad | O((V + E) log V) | O(V + E) |
 
 El ABB no se rebalancea. Si las etiquetas llegan en orden, el árbol se vuelve una lista y cada búsqueda cuesta O(n). El AVL evita ese caso porque se rebalancea después de cada inserción.
+
+## Medición
+
+`Medicion` crea una estructura nueva para cada ejecución, hace una ejecución de calentamiento y promedia cinco repeticiones. El tiempo de Dijkstra incluye la creación del grafo dirigido en cadena y la búsqueda desde el primer hasta el último vértice.
+
+| n | ABB ordenado (ms) | AVL ordenado (ms) | Construcción del grafo + Dijkstra (ms) |
+|---:|---:|---:|---:|
+| 1 000 | 5.405 | 1.147 | 5.163 |
+| 10 000 | 290.956 | 2.310 | 15.959 |
+| 100 000 | 96443.607 | 24.391 | 228.167 |
+
+En esta ejecución, el ABB con datos ordenados subió unas 54 veces al pasar de 1 000 a 10 000 elementos. Cada inserción recorre casi todo el árbol, así que cuesta O(n) por operación y O(n²) en total. La inserción del ABB es iterativa para permitir medir 100 000 elementos sin desbordar la pila; el costo cuadrático permanece.
+
+Equipo de medición: Intel Core i3-14100, 15,8 GB de RAM, Windows 11 Pro de 64 bits (compilación 26200), Java 24.0.1.
 
 ## Resultados de control
 
@@ -165,6 +179,7 @@ Los tiempos son datos simulados y no representan tránsito real. El menú valida
 ## Origen del código y herramientas
 
 - El pom.xml y la configuración de JUnit 5 se basan en la documentación oficial de Maven y JUnit.
+- Parte de la estructura y de la implementación del código se generó con asistencia de ChatGPT. El autor la revisó y adaptó para el proyecto, incluida la inserción iterativa del ABB y la clase Medicion.
 - Las pruebas JUnit fueron escritas por el autor a partir de los casos del enunciado.
 
 

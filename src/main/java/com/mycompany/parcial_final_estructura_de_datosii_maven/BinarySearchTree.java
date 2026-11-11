@@ -15,18 +15,24 @@ public class BinarySearchTree<T extends Comparable<T>> {
     public boolean insert(T value) {
         requireValue(value);
         if (root == null) { root = new Node<>(value); return true; }
-        return insert(root, value);
-    }
-
-    private boolean insert(Node<T> node, T value) {
-        int comparison = value.compareTo(node.value);
-        if (comparison == 0) return false;
-        if (comparison < 0) {
-            if (node.left == null) { node.left = new Node<>(value); return true; }
-            return insert(node.left, value);
+        Node<T> current = root;
+        while (true) {
+            int comparison = value.compareTo(current.value);
+            if (comparison == 0) return false;
+            if (comparison < 0) {
+                if (current.left == null) {
+                    current.left = new Node<>(value);
+                    return true;
+                }
+                current = current.left;
+            } else {
+                if (current.right == null) {
+                    current.right = new Node<>(value);
+                    return true;
+                }
+                current = current.right;
+            }
         }
-        if (node.right == null) { node.right = new Node<>(value); return true; }
-        return insert(node.right, value);
     }
 
     public boolean search(T value) {
